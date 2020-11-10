@@ -1,0 +1,24 @@
+{
+    "env": {
+        "node": true
+    } ,
+    "extends": [
+        "airbnb-bus",
+        "plugin: pretier/recomended"
+
+    ], "plugin": [
+        "prettier"
+    ],
+    "root": true,
+    "rules": {
+        "no-console": "off",
+        "prettier/prettier": "error",
+        "no-param-reassign": [
+            "error",
+            {
+                "prups": false
+            }
+        ]
+
+    }
+}
