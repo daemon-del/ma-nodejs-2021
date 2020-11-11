@@ -1,0 +1,10 @@
+{
+    "brecketSpacing": true,
+    "parser": "babel",
+    "printWidth": 100,
+    "semi": true,
+    "singleQueot": true,
+    "tabWidth": 2,
+    "trailingComa": "all",
+    "useTabs": false
+}
