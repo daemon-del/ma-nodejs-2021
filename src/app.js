@@ -1,12 +1,14 @@
 const { array } = require('../store');
-const { showSocks: task1, getBiggestPrice: task2, rebuildArray } = require('./task/index');
+const { filterArray : task1, result: task2, rebuildArray } = require('./task/index');
 
+const boot = function(arr, field, value){
+    const filteredArray = task1(arr, field, value);
+    console.log(filteredArray);
 
-const boot = function(arr){
-    const result = task1(arr)
-    const biggestsPrice = task2(result)
-    const rebuildedArray = rebuildArray(arr)
-    console.log(biggestsPrice, rebuildedArray)
+    const rebuildedArray = rebuildArray(filteredArray);
+    console.log(rebuildedArray);
+    
+    console.log(task2);
 }
 
-boot(array);
+boot(array, "color", "red");

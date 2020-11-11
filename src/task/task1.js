@@ -1,8 +1,8 @@
-function showSocks(arr) {
-  return arr.filter((element) => element.type === 'socks');
+function filterArray(arr, field, value) {
+  return arr.filter((element) => element[field] === value);
 }
 
 module.exports = {
-  showSocks
+  filterArray,
 }
  

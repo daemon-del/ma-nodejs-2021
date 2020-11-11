@@ -8,10 +8,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "package.json": "^2.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "^7.12.1",
     "eslint-config-airbnb": "^18.2.0",
