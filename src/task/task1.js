@@ -4,5 +4,4 @@ function filterArray(arr, field, value) {
 
 module.exports = {
   filterArray,
-}
- 
+};

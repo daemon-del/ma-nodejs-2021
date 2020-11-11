@@ -3,20 +3,24 @@
         "node": true
     } ,
     "extends": [
-        "airbnb-bus",
-        "plugin: pretier/recomended"
-
-    ], "plugin": [
+        "airbnb-base",
+        "plugin:prettier/recommended"
+    ], "plugins": [
         "prettier"
     ],
     "root": true,
     "rules": {
         "no-console": "off",
-        "prettier/prettier": "error",
+        "prettier/prettier": [
+            "error",
+            {
+              "endOfLine": "auto",
+            },
+          ],
         "no-param-reassign": [
             "error",
             {
-                "prups": false
+                "props": false
             }
         ]
 
