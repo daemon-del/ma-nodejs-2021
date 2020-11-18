@@ -4,7 +4,6 @@ const path = require('path');
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
 const goods = require('../../goods.json');
-const { array } = require('../store');
 const { filterArray, rebuildArray, result } = require('../task/index');
 
 let goodsArr = [];
@@ -16,7 +15,7 @@ function home(request, response) {
 function task1(response, queryParams) {
   console.log(queryParams);
   if (queryParams.field === 'quantity') {
-    goodsArr = filterArray(goods, queryParams.field, queryParams.value);
+    goodsArr = filterArray(goods, queryParams.field, +queryParams.value);
   } else {
     goodsArr = filterArray(goods, queryParams.field, queryParams.value);
   }
