@@ -3,8 +3,9 @@
     "parser": "babel",
     "printWidth": 100,
     "semi": true,
-    "singleQueot": true,
+    "singleQuote": true,
     "tabWidth": 2,
     "trailingComa": "all",
-    "useTabs": false
+    "useTabs": false,
+    "endOfLine": "auto"
 }

@@ -1,10 +1,10 @@
-const { array } = require("../../store");
+const { array } = require('../store');
 
 function getBiggestPrice(arr) {
   let biggerPrice = 0;
   let good;
 
-  arr.forEach((element) => {
+  arr.forEach(element => {
     const price = +(element.price || element.priceForPair).slice(1);
 
     if (biggerPrice < price) {
@@ -19,5 +19,5 @@ function getBiggestPrice(arr) {
 const result = getBiggestPrice(array);
 
 module.exports = {
-  result,
+  result
 };

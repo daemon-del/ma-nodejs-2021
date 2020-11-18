@@ -22,7 +22,8 @@
             {
                 "props": false
             }
-        ]
-
+        ],
+        "quotes": [2, "single", { "avoidEscape": true }]
     }
+
 }
