@@ -12,14 +12,12 @@ function notFound(res) {
 }
 
 module.exports = (request, response) => {
-  const { url, method, body: data } = request;
-  const queryParams = JSON.stringify(request.queryParams);
-  console.log(queryParams);
+  const { url, method, body: data, queryParams } = request;
   response.setHeader('Content-Type', 'application/json');
   if (method === 'GET' && url === '/') return home(request, response);
 
   if (method === 'GET' && url.startsWith('/task1?')) {
-    return filterGoods(response,queryParams);
+    return filterGoods(response, queryParams);
   };
 
   if (method === 'GET' && url === '/task2') return findMostExpensiveGoods(response);

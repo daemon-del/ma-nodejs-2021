@@ -7,8 +7,7 @@ module.exports = async (request, response) => {
   try {
     const { url } = request;
     const parsedUrl = new URL(url, process.env.ORIGIN);
-    const queryParams = parseQuery(parsedUrl.search.substr(1));
-
+    const queryParams = JSON.parse(JSON.stringify(parseQuery(parsedUrl.search.substr(1))));
     let body = [];
 
     request

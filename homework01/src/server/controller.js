@@ -4,7 +4,8 @@ const path = require('path');
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
 const goods = require('../../goods.json');
-const { task1: filterArray, task2: secondTask, task3: thirdTask } = require('../task/index');
+const { array } = require('../store');
+const { filterArray, rebuildArray, result } = require('../task/index');
 
 let goodsArr = [];
 
@@ -12,23 +13,22 @@ function home(request, response) {
   response.end();
 }
 
-function task1(response, queryParamss) {
-  const queryParams = JSON.parse(JSON.stringify(queryParamss));
+function task1(response, queryParams) {
   console.log(queryParams);
   if (queryParams.field === 'quantity') {
-    goodsArr = task1(goods, queryParams.field, +queryParams.value);
+    goodsArr = filterArray(goods, queryParams.field, queryParams.value);
   } else {
-    goodsArr = task1(goods, queryParams.field, queryParams.value);
+    goodsArr = filterArray(goods, queryParams.field, queryParams.value);
   }
   response.end(JSON.stringify(goodsArr));
 }
 
 function task2(response) {
-  response.end(JSON.stringify(secondTask));
+  response.end(JSON.stringify(result));
 }
 
 function task3(response) {
-  response.end(JSON.stringify(thirdTask(goods)));
+  response.end(JSON.stringify(rebuildArray(goods)));
 }
 
 function newFile(data, response) {
