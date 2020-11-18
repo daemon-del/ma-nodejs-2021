@@ -4,7 +4,7 @@ const router = require('./routing');
 
 module.exports = async (request, response) => {
   try {
-    const { url, method } = request;
+    const { url } = request;
     const parsedUrl = new URL(url, process.env.ORIGIN);
     const queryParams = parseQuery(parsedUrl.search.substr(1));
 
