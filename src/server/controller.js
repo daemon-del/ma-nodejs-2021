@@ -5,6 +5,7 @@ const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
 const goods = require('../../goods.json');
 const { filterArray, rebuildArray, result } = require('../task/index');
+const { getValidDiscountAsync } = require('../myMap/discount');
 
 let goodsArr = [];
 
@@ -35,10 +36,20 @@ function newFile(data, response) {
   response.end(JSON.stringify(data));
 }
 
+async function setDiscount(response) {
+  const rebuildedArray = rebuildArray(goods);
+  const newMap = rebuildedArray.map(async currentValue => {
+    const discount = await getValidDiscountAsync();
+    currentValue.discount = discount;
+  });
+  response.end(JSON.stringify(newMap));
+}
+
 module.exports = {
   home,
   task1,
   task2,
   task3,
-  newFile
+  newFile,
+  setDiscount
 };
