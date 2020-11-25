@@ -38,10 +38,24 @@ function newFile(data, response) {
 
 async function setDiscount(response) {
   const rebuildedArray = rebuildArray(goods);
-  const newMap = rebuildedArray.map(async currentValue => {
-    const discount = await getValidDiscountAsync();
-    currentValue.discount = discount;
-  });
+
+  const newMap = await Promise.all(
+    rebuildedArray.map(async currentValue => {
+      let discount =  await getValidDiscountAsync();
+
+      if (currentValue.type === 'hat') { 
+        discount += await getValidDiscountAsync();
+      }
+
+      if (currentValue.type === 'hat' && currentValue.color === 'red') {
+        discount += await getValidDiscountAsync();
+      }
+
+      currentValue.discount = discount;
+
+      return currentValue;
+    })
+  );
   response.end(JSON.stringify(newMap));
 }
 
