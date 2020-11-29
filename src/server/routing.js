@@ -3,7 +3,8 @@ const {
   task1: filterGoods,
   task2: findMostExpensiveGoods,
   task3: remapGoods,
-  newFile
+  newFile,
+  setDiscount
 } = require('./controller.js');
 
 function notFound(res) {
@@ -18,11 +19,13 @@ module.exports = (request, response) => {
 
   if (method === 'GET' && url.startsWith('/task1?')) {
     return filterGoods(response, queryParams);
-  };
+  }
 
   if (method === 'GET' && url === '/task2') return findMostExpensiveGoods(response);
 
   if (method === 'GET' && url === '/task3') return remapGoods(response);
+
+  if (method === 'GET' && url === '/products/discounts') return setDiscount(response);
 
   if (method === 'POST' && url === '/newFile') return newFile(data, response);
   return notFound(response);

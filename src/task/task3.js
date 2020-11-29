@@ -1,10 +1,13 @@
+const { myMap } = require('../myMap/myMap');
+
 function rebuildArray(arr) {
-  return arr.map(element => {
+  return myMap(arr, element => {
     return {
       type: element.type || '',
       color: element.color || '',
       quantity: element.quantity || 0,
-      price: element.price || element.priceForPair || 0
+      price: +(element.price || element.priceForPair).slice(1) || 0,
+      discount: 0
     };
   });
 }
