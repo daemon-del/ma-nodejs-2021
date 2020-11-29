@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 const { parse: parseQuery } = require('querystring');
 const { URL } = require('url');
 const router = require('./routing');

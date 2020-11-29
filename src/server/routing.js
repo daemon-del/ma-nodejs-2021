@@ -19,7 +19,7 @@ module.exports = (request, response) => {
 
   if (method === 'GET' && url.startsWith('/task1?')) {
     return filterGoods(response, queryParams);
-  };
+  }
 
   if (method === 'GET' && url === '/task2') return findMostExpensiveGoods(response);
 

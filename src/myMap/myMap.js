@@ -1,5 +1,11 @@
-function myMap(array, callback){
+function myMap(array, callback) {
   const black = [];
-  array.forEach((element, i) => black.push(callback(element[i])));
+  for (let i = 0; i < array.length; i += 1) {
+    black.push(callback(array[i]));
+  }
   return black;
 }
+
+module.exports = {
+  myMap
+};

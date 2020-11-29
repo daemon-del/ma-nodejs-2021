@@ -29,15 +29,12 @@ function generateValidDiscount(callback) {
   });
 }
 
-function generateValidDiscountPromise() {
-  return promisify(generateValidDiscount);
+function generateValidDiscountAsync() {
+  const promise = promisify(generateValidDiscount);
+
+  return promise();
 }
 
-async function getValidDiscountAsync() {
-  const result = generateValidDiscountPromise();
-
-  return result();
-}
 module.exports = {
-  getValidDiscountAsync
+  generateValidDiscountAsync
 };

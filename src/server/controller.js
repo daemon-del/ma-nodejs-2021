@@ -5,7 +5,7 @@ const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
 const goods = require('../../goods.json');
 const { filterArray, rebuildArray, result } = require('../task/index');
-const { getValidDiscountAsync } = require('../myMap/discount');
+const { generateValidDiscountAsync } = require('../myMap/discount');
 
 let goodsArr = [];
 
@@ -39,24 +39,28 @@ function newFile(data, response) {
 async function setDiscount(response) {
   const rebuildedArray = rebuildArray(goods);
 
-  const newMap = await Promise.all(
-    rebuildedArray.map(async currentValue => {
-      let discount =  await getValidDiscountAsync();
+  try {
+    const newMap = await Promise.all(
+      rebuildedArray.map(async currentValue => {
+        let discount = await generateValidDiscountAsync();
 
-      if (currentValue.type === 'hat') { 
-        discount += await getValidDiscountAsync();
-      }
+        if (currentValue.type === 'hat') {
+          discount += await generateValidDiscountAsync();
+        }
 
-      if (currentValue.type === 'hat' && currentValue.color === 'red') {
-        discount += await getValidDiscountAsync();
-      }
+        if (currentValue.type === 'hat' && currentValue.color === 'red') {
+          discount += await generateValidDiscountAsync();
+        }
 
-      currentValue.discount = discount;
+        currentValue.discount = discount;
 
-      return currentValue;
-    })
-  );
-  response.end(JSON.stringify(newMap));
+        return currentValue;
+      })
+    );
+    response.end(JSON.stringify(newMap));
+  } catch (err) {
+    return response.end(JSON.stringify(err));
+  }
 }
 
 module.exports = {

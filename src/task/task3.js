@@ -1,5 +1,7 @@
+const { myMap } = require('../myMap/myMap');
+
 function rebuildArray(arr) {
-  return arr.map(element => {
+  return myMap(arr, element => {
     return {
       type: element.type || '',
       color: element.color || '',
