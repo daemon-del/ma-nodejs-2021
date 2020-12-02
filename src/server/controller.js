@@ -1,11 +1,34 @@
+const {pipelin} = require('stream');
+const {currentGunzip, createGunzip} = require('zlib');
+const {promisify} = require('util');
 const fs = require('fs');
 const path = require('path');
+
+
+const promisifiedPipelin = promisify(pipelin);
+
+const {createCsvToJson} = require('../utils/csv-to-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
 const goods = require('../../goods.json');
 const { filterArray, rebuildArray, result } = require('../task/index');
 const { generateValidDiscountAsync } = require('../myMap/discount');
+
+async function aploadCsv(inputStream) {
+  const gunzip = createGunzip();
+
+  const timestamp = Date.now();
+  const filePath = `./upload/${timestamp}.json`;
+  const outputStream = fs.createWriteStream(filePath);
+  const csvToJson = createCsvToJson();
+
+  try {
+    await promisifiedPipelin( inputStream, gunzip, csvToJson, outputStream);
+  } catch (err){
+    console.error('csv pipelin failed', err);
+  }
+}
 
 let goodsArr = [];
 
@@ -57,7 +80,7 @@ async function setDiscount(response) {
         return currentValue;
       })
     );
-    response.end(JSON.stringify(newMap));
+    return response.end(JSON.stringify(newMap));
   } catch (err) {
     return response.end(JSON.stringify(err));
   }
@@ -69,5 +92,6 @@ module.exports = {
   task2,
   task3,
   newFile,
-  setDiscount
+  setDiscount,
+  uploadCsv,
 };
