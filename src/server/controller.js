@@ -10,7 +10,7 @@ const { createCsvToJson } = require('../utils/csv-to-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
-const goods = require('../../goods.json');
+const goods = require('../store');
 const { filterArray, rebuildArray, result } = require('../task/index');
 const { generateValidDiscountAsync } = require('../myMap/discount');
 

@@ -30,7 +30,7 @@ module.exports = async (request, response) => {
         router(
           {
             ...request,
-            body: body ? JSON.parse(body) : {},
+            // body: body ? JSON.parse(body) : {},
             url,
             queryParams
           },
