@@ -2,13 +2,12 @@ require('dotenv').config();
 const { parse: parseQuery } = require('querystring');
 const { URL } = require('url');
 const router = require('./routing');
-
+const { handleSteramRoutes } = require('./controller');
 
 function handle(request, response) {
-  if (request.headers['content-type'==='text/csv']{
-handleSteramRoutes(request, response).catch(err => console.error('csv handler feiled', err))
-  return;
-}
+  if (request.headers['content-type' === 'text/csv']) {
+    handleSteramRoutes(request, response).catch(err => console.error('csv handler feiled', err));
+  }
 }
 
 module.exports = async (request, response) => {

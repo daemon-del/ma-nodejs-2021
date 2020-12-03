@@ -1,20 +1,19 @@
-function enableGrasefulExit(){
-  const exitHantler = error =>{
+const server = require('./server');
+
+function enableGrasefulExit() {
+  const exitHantler = error => {
     if (error) console.error(error);
 
     console.log('Gracefully stopping...');
-    server.stop(() =>{
+    server.stop(() => {
       process.exit();
-    }
-  });
+    });
+  };
 }
-const server = require('./server');
-
 
 function boot() {
   enableGrasefulExit();
   server.start();
 }
-
 
 boot();

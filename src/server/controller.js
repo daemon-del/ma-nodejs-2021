@@ -1,13 +1,12 @@
-const {pipelin} = require('stream');
-const {currentGunzip, createGunzip} = require('zlib');
-const {promisify} = require('util');
+const { pipeline } = require('stream');
+const { createGunzip } = require('zlib');
+const { promisify } = require('util');
 const fs = require('fs');
 const path = require('path');
 
+const promisifiedPipelin = promisify(pipeline);
 
-const promisifiedPipelin = promisify(pipelin);
-
-const {createCsvToJson} = require('../utils/csv-to-json');
+const { createCsvToJson } = require('../utils/csv-to-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
@@ -15,7 +14,7 @@ const goods = require('../../goods.json');
 const { filterArray, rebuildArray, result } = require('../task/index');
 const { generateValidDiscountAsync } = require('../myMap/discount');
 
-async function aploadCsv(inputStream) {
+async function uploadCsv(inputStream) {
   const gunzip = createGunzip();
 
   const timestamp = Date.now();
@@ -24,8 +23,8 @@ async function aploadCsv(inputStream) {
   const csvToJson = createCsvToJson();
 
   try {
-    await promisifiedPipelin( inputStream, gunzip, csvToJson, outputStream);
-  } catch (err){
+    await promisifiedPipelin(inputStream, gunzip, csvToJson, outputStream);
+  } catch (err) {
     console.error('csv pipelin failed', err);
   }
 }
@@ -86,6 +85,27 @@ async function setDiscount(response) {
   }
 }
 
+async function handleSteramRoutes(request, response) {
+  const { url, method } = request;
+
+  if (method === 'PUT' && url === '/store/csv') {
+    try {
+      await uploadCsv(request);
+    } catch (err) {
+      console.error('Failed  to upload  CSV', err);
+    }
+
+    response.setHeader('Content-Type', 'application/json');
+    response.statusCode = 500;
+    response.end(JSON.stringify({ status: 'error' }));
+    return;
+  }
+
+  response.setHeader('Content-Type', 'application/json');
+  response.statusCode = 200;
+  response.end(JSON.stringify({ status: 'ok' }));
+}
+
 module.exports = {
   home,
   task1,
@@ -94,4 +114,5 @@ module.exports = {
   newFile,
   setDiscount,
   uploadCsv,
+  handleSteramRoutes
 };
