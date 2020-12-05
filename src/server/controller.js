@@ -88,7 +88,7 @@ async function setDiscount(response) {
 async function handleSteramRoutes(request, response) {
   const { url, method } = request;
 
-  if (method === 'PUT' && url === '/store/csv') {
+  if (method === 'POST' && url === '/store/csv') {
     try {
       await uploadCsv(request);
     } catch (err) {
