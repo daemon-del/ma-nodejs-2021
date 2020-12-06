@@ -3,16 +3,16 @@ const { createGunzip } = require('zlib');
 const { promisify } = require('util');
 const fs = require('fs');
 const path = require('path');
+const csvtojsonV2 = require('csvtojson');
+const goods = require('../store');
+const { filterArray, rebuildArray, result } = require('../task/index');
+const { generateValidDiscountAsync } = require('../myMap/discount');
 
 const promisifiedPipelin = promisify(pipeline);
 
 const { createCsvToJson } = require('../utils/csv-to-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
-
-const goods = require('../store');
-const { filterArray, rebuildArray, result } = require('../task/index');
-const { generateValidDiscountAsync } = require('../myMap/discount');
 
 async function uploadCsv(inputStream) {
   const gunzip = createGunzip();
@@ -24,6 +24,13 @@ async function uploadCsv(inputStream) {
 
   try {
     await promisifiedPipelin(inputStream, gunzip, csvToJson, outputStream);
+
+    const json = await csvtojsonV2().fromFile(filePath);
+    fs.writeFile(filePath, JSON.stringify(json, null, 2), (err) => {
+      if (err) {
+          throw err;
+      }
+  });
   } catch (err) {
     console.error('csv pipelin failed', err);
   }

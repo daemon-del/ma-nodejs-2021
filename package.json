@@ -21,6 +21,7 @@
     "nodemon": "^2.0.6"
   },
   "dependencies": {
+    "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0"
   }
 }
