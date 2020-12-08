@@ -1,8 +1,10 @@
 const { Transform } = require('stream');
 
+
 function createCsvToJson() {
   const transform = (chunk, encoding, callback) => {
-    callback(null, chunk.toString());
+    const string = chunk.toString();
+    callback(null, string);
   };
 
   const flush = callback => {

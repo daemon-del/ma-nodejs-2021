@@ -24,13 +24,6 @@ async function uploadCsv(inputStream) {
 
   try {
     await promisifiedPipelin(inputStream, gunzip, csvToJson, outputStream);
-
-    const json = await csvtojsonV2().fromFile(filePath);
-    fs.writeFile(filePath, JSON.stringify(json, null, 2), (err) => {
-      if (err) {
-          throw err;
-      }
-  });
   } catch (err) {
     console.error('csv pipelin failed', err);
   }

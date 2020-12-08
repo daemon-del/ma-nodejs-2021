@@ -1,3 +1,4 @@
+const fs = require('fs');
 const {
   home,
   task1: filterGoods,
@@ -19,6 +20,11 @@ module.exports = (request, response) => {
 
   if (method === 'GET' && url.startsWith('/task1?')) {
     return filterGoods(response, queryParams);
+  }
+
+  if (method === 'GET' && url === '/list') {
+    const fileList = fs.readdirSync('./upload');
+    return response.end(JSON.stringify(fileList));
   }
 
   if (method === 'GET' && url === '/task2') return findMostExpensiveGoods(response);
