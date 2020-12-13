@@ -1,9 +1,10 @@
+const { v4: uuidv4 } = require('uuid');
+const es = require('event-stream');
 const { pipeline } = require('stream');
 const { createGunzip } = require('zlib');
 const { promisify } = require('util');
 const fs = require('fs');
 const path = require('path');
-const csvtojsonV2 = require('csvtojson');
 const goods = require('../store');
 const { filterArray, rebuildArray, result } = require('../task/index');
 const { generateValidDiscountAsync } = require('../myMap/discount');
@@ -17,13 +18,13 @@ const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 async function uploadCsv(inputStream) {
   const gunzip = createGunzip();
 
-  const timestamp = Date.now();
-  const filePath = `./upload/${timestamp}.json`;
+  const uniqueFileName = uuidv4();
+  const filePath = `./upload/${uniqueFileName}.json`;
   const outputStream = fs.createWriteStream(filePath);
   const csvToJson = createCsvToJson();
 
   try {
-    await promisifiedPipelin(inputStream, gunzip, csvToJson, outputStream);
+    await promisifiedPipelin(inputStream, gunzip, es.split(), csvToJson, outputStream);
   } catch (err) {
     console.error('csv pipelin failed', err);
   }

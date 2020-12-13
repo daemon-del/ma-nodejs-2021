@@ -1,62 +1,55 @@
 const { Transform } = require('stream');
 
+function makeGoods(csvKeys, csvValues) {
+  const goodEntries = {};
+
+  csvKeys.forEach((key, i) => {
+    let value = csvValues[i] || 'N/A';
+
+    if (key === 'quantity') {
+      value = Number.parseInt(csvValues[i], 10);
+      if (Number.isNaN(value)) {
+        console.error('Uncorrect quantity', value);
+        value = 0;
+      }
+    }
+    if (key === 'price') value = `$${value}`;
+
+    goodEntries[key] = value;
+  });
+
+  return goodEntries;
+}
 function createCsvToJson() {
-  let isNotFirst = false;
-  let insertLineSeparator = false;
-  let columnsHeaders = [];
-  let rowCount = 0;
+  let firstLine;
+  let needComma = false;
 
   const transform = (chunk, encoding, callback) => {
-    let result = '';
+    const newRow = chunk.toString().split(',');
 
-    const stringProduct = chunk.toString('utf8');
-    if (columnsHeaders.toString() === stringProduct) return callback(null, '');
-
-    const arrayProduct = stringProduct.split(',');
-
-    const addAllColumnsInProduct = arrayValuesProduct => {
-      const product = {};
-      arrayValuesProduct.forEach((valueProduct, index) => {
-        product[columnsHeaders[index]] = valueProduct;
-      });
-
-      const fullProduct = {
-        type: product.type,
-        color: product.color,
-        quantity: product.quantity,
-      };
-
-      if (product.isPair === 'true') fullProduct.priceForPair = product.price;
-      else fullProduct.price = product.price;
-
-      return fullProduct;
-    };
-
-    if (isNotFirst) {
-      rowCount += 1;
-
-      if (insertLineSeparator) result += ',\n';
-      else insertLineSeparator = true;
-
-      const product = addAllColumnsInProduct(arrayProduct);
-      result += `${JSON.stringify(product)}`;
-    } else {
-      result += '[';
-      isNotFirst = true;
-      columnsHeaders = arrayProduct;
+    if (!firstLine) {
+      firstLine = newRow;
+      return callback(null, '[');
     }
+    if (newRow[0] === '') return callback(null, '');
+    let output = '';
+    if (needComma) output += ',\n';
+    else needComma = true;
 
-    return callback(null, result);
+    const good = makeGoods(firstLine, newRow);
+    output += JSON.stringify(good);
+
+    return callback(null, output);
   };
 
   const flush = callback => {
-    console.log(`Parsed ${rowCount} rows at all!`);
+    console.log('No more data to read.');
     callback(null, ']');
   };
-
   return new Transform({ transform, flush });
 }
 
 module.exports = {
-  createCsvToJson,
+  makeGoods,
+  createCsvToJson
 };
