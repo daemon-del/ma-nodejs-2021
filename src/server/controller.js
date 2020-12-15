@@ -12,6 +12,7 @@ const { generateValidDiscountAsync } = require('../services/discount');
 const promisifiedPipelin = promisify(pipeline);
 
 const { createCsvToJson } = require('../services/csv-to-json');
+const { createJsonOptimizer } = require('../services/optimize-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
@@ -86,9 +87,52 @@ async function setDiscount(response) {
   }
 }
 
+async function optimizeJson(filename) {
+  const uploadDir = './upload';
+  const filePath = path.join(uploadDir, filename);
+
+  const optimizedDir = './optimize';
+  const optimizedFilePath = path.join(optimizedDir, filename);
+
+  const fileReader = fs.createReadStream(filePath);
+
+  const optimizedGoods = [];
+  const optimizer = createJsonOptimizer(optimizedGoods);
+
+  try {
+    await promisifiedPipelin(fileReader, optimizer);
+  } catch (err) {
+    console.error('Optimization pipeline failed', err);
+  }
+
+  try {
+    const optimizedJson = JSON.stringify(optimizedGoods, null, 2);
+    if (!fs.existsSync(optimizedDir)) {
+      fs.mkdirSync(optimizedDir);
+    }
+
+    await fs.promises.writeFile(optimizedFilePath, optimizedJson);
+  } catch (err) {
+    console.error(`Unable to write optimized JSON to ${optimizedDir}`, err);
+    throw new Error('Unable to write optimized JSON');
+  }
+
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (err) {
+    console.error(`Unable to remove JSON ${filePath}`, err);
+    throw new Error('Unable to remove JSON');
+  }
+
+  const totalQuantity = optimizedGoods.reduce((total, good) => {
+    return total + good.quantity;
+  }, 0);
+
+  console.log(`Optimization process finished. Total good quantity: ${totalQuantity}`);
+}
+
 async function handleSteramRoutes(request, response) {
   const { url, method } = request;
-
   if (method === 'POST' && url === '/store/csv') {
     try {
       await uploadCsv(request);
@@ -102,7 +146,7 @@ async function handleSteramRoutes(request, response) {
 
   response.setHeader('Content-Type', 'application/json');
   response.statusCode = 200;
-  response.end(JSON.stringify({ status: 'ok' }));
+  return response.end(JSON.stringify({ status: 'ok' }));
 }
 
 module.exports = {
@@ -113,5 +157,6 @@ module.exports = {
   newFile,
   setDiscount,
   uploadCsv,
-  handleSteramRoutes
+  handleSteramRoutes,
+  optimizeJson
 };

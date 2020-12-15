@@ -1,3 +1,4 @@
+const path = require('path');
 const fs = require('fs');
 const {
   home,
@@ -5,7 +6,8 @@ const {
   task2: findMostExpensiveGoods,
   task3: remapGoods,
   newFile,
-  setDiscount
+  setDiscount,
+  optimizeJson
 } = require('./controller.js');
 
 function notFound(res) {
@@ -13,9 +15,14 @@ function notFound(res) {
   res.end('404 page not found');
 }
 
-module.exports = (request, response) => {
+module.exports = async (request, response) => {
   const { url, method, body: data, queryParams } = request;
   response.setHeader('Content-Type', 'application/json');
+
+  const urlPath = path.parse(url);
+
+  console.log(1);
+
   if (method === 'GET' && url === '/') return home(request, response);
 
   if (method === 'GET' && url.startsWith('/task1?')) {
@@ -34,5 +41,18 @@ module.exports = (request, response) => {
   if (method === 'GET' && url === '/products/discounts') return setDiscount(response);
 
   if (method === 'POST' && url === '/store/csv') return newFile(data, response);
+
+  if (method === 'POST' && urlPath.dir === '/upload/optimize') {
+    const fileName = urlPath.base;
+    try {
+      await optimizeJson(fileName);
+    } catch (err) {
+      response.statusCode = 500;
+      return response.end(JSON.stringify({ status: 'error' }));
+    }
+    response.statusCode = 200;
+    return response.end(JSON.stringify({ status: 'ok' }));
+  }
+
   return notFound(response);
 };
