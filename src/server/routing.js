@@ -33,6 +33,6 @@ module.exports = (request, response) => {
 
   if (method === 'GET' && url === '/products/discounts') return setDiscount(response);
 
-  if (method === 'POST' && url === '/upload') return newFile(data, response);
+  if (method === 'POST' && url === '/store/csv') return newFile(data, response);
   return notFound(response);
 };

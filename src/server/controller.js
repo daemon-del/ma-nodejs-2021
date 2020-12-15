@@ -7,11 +7,11 @@ const fs = require('fs');
 const path = require('path');
 const goods = require('../store');
 const { filterArray, rebuildArray, result } = require('../task/index');
-const { generateValidDiscountAsync } = require('../myMap/discount');
+const { generateValidDiscountAsync } = require('../services/discount');
 
 const promisifiedPipelin = promisify(pipeline);
 
-const { createCsvToJson } = require('../utils/csv-to-json');
+const { createCsvToJson } = require('../services/csv-to-json');
 
 const pathToFile = path.resolve(__dirname, '../../', 'goods.json');
 
@@ -94,12 +94,10 @@ async function handleSteramRoutes(request, response) {
       await uploadCsv(request);
     } catch (err) {
       console.error('Failed  to upload  CSV', err);
+      response.setHeader('Content-Type', 'application/json');
+      response.statusCode = 500;
+      return response.end(JSON.stringify({ status: 'error' }));
     }
-
-    response.setHeader('Content-Type', 'application/json');
-    response.statusCode = 500;
-    response.end(JSON.stringify({ status: 'error' }));
-    return;
   }
 
   response.setHeader('Content-Type', 'application/json');

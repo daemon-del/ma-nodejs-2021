@@ -1,4 +1,4 @@
-const { myMap } = require('../myMap/myMap');
+const { myMap } = require('../services/myMap');
 
 function rebuildArray(arr) {
   return myMap(arr, element => {
