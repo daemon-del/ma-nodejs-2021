@@ -44,12 +44,14 @@ module.exports = async (request, response) => {
 
   if (method === 'POST' && urlPath.dir === '/upload/optimize') {
     const fileName = urlPath.base;
-    try {
-      await optimizeJson(fileName);
-    } catch (err) {
-      response.statusCode = 500;
-      return response.end(JSON.stringify({ status: 'error' }));
-    }
+    (async () => {
+      try {
+        await optimizeJson(fileName);
+      } catch (err) {
+        response.statusCode = 500;
+        return response.end(JSON.stringify({ status: 'error' }));
+      }
+    })();
     response.statusCode = 200;
     return response.end(JSON.stringify({ status: 'ok' }));
   }
