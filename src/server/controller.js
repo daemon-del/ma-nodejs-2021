@@ -145,7 +145,7 @@ async function handleSteramRoutes(request, response) {
   }
 
   response.setHeader('Content-Type', 'application/json');
-  response.statusCode = 200;
+  response.statusCode = 202;
   return response.end(JSON.stringify({ status: 'ok' }));
 }
 
