@@ -1,4 +1,4 @@
-const { array } = require('../store');
+const { goods } = require('../store');
 
 function getBiggestPrice(arr) {
   let biggerPrice = 0;
@@ -16,7 +16,7 @@ function getBiggestPrice(arr) {
   return good;
 }
 
-const result = getBiggestPrice(array);
+const result = getBiggestPrice(goods);
 
 module.exports = {
   result

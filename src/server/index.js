@@ -8,9 +8,14 @@ const port = process.env.PORT;
 const server = http.createServer(requestHandler);
 
 function start() {
-  server.listen(port, () => console.log(`server is listening on ${port} `));
+  return server.listen(port, () => console.log(`server is listening on ${port} `));
+}
+
+function close() {
+  return server.close();
 }
 
 module.exports = {
-  start
+  start,
+  close
 };

@@ -1,4 +1,4 @@
-const array = [
+const goods = [
   { type: 'socks', color: 'red', quantity: 10, priceForPair: '$3' },
   { type: 'socks', color: 'green', quantity: 5, priceForPair: '$10' },
   { type: 'socks', color: 'blue', quantity: 8, priceForPair: '$6' },
@@ -15,5 +15,5 @@ const array = [
 ];
 
 module.exports = {
-  array
+  goods
 };
