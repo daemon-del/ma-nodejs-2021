@@ -21,8 +21,6 @@ module.exports = async (request, response) => {
 
   const urlPath = path.parse(url);
 
-  console.log(1);
-
   if (method === 'GET' && url === '/') return home(request, response);
 
   if (method === 'GET' && url.startsWith('/task1?')) {
@@ -52,7 +50,7 @@ module.exports = async (request, response) => {
         return response.end(JSON.stringify({ status: 'error' }));
       }
     })();
-    response.statusCode = 200;
+    response.statusCode = 202;
     return response.end(JSON.stringify({ status: 'ok' }));
   }
 
